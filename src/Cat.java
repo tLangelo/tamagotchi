@@ -1,4 +1,15 @@
 public class Cat extends Tamagotchi{
+
+        // Constructor
+    public Cat(String name, int happiness, int energy, int hunger, int tiredness){
+        this.name = name;
+        this.happiness = happiness;
+        this.energy = energy;
+        this.hunger = hunger;
+        this.tiredness = tiredness;
+    }
+
+
     @Override
     public void play() {
         System.out.println("You pull out your laser pointer and start playing with "
@@ -21,4 +32,11 @@ public class Cat extends Tamagotchi{
     public void makeSound() {
         System.out.println("Meow");
     }
+
+    String catArt =
+            "####" +
+            "#o#o##\n" +
+            "##V###\n" +
+            "########\n" +
+            "#v###v##";
 }
