@@ -108,7 +108,7 @@ class GameStart {
                         "\n4.\tMake sound" +
                         "\n5.\tQuit");
     }
-
+    // random value to give to the stats of the tamagotchi
     private int randomValue(){
         int max = 10;
         int min = 3;
@@ -117,7 +117,7 @@ class GameStart {
 
         return randomNumber;
     }
-
+    // getting name of tamagotchi
     private void assignTamagotchiName(Tamagotchi tamagotchi)
     {
         System.out.println("What do you wanna call your Tamagotchi?");
@@ -126,6 +126,7 @@ class GameStart {
         System.out.println(tamagotchi.name + ".. Great name!");
     }
 
+        // MAIN //
     public void startGame()
     {
         mainMenu();
@@ -133,7 +134,7 @@ class GameStart {
 }
 
 public class Game {
-    // MAIN //
+    //kalder nye main for at slippe ud af static
     public static void main(String[] args) {
         new GameStart().startGame();
     }
