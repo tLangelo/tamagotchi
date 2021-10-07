@@ -1,13 +1,15 @@
 import java.util.Scanner;
 
-public class Game {
-    static Scanner scan = new Scanner(System.in);
-    static String nameOfTamagotchi = "";
-    static String longLine = "-------------------";
+    // Laver ny "main" for at slippe for static
+class GameStart {
+
+    private final Scanner scan = new Scanner(System.in);
+    private final String longLine = "-------------------";
+    private Tamagotchi tamagotchi = null;
 
 
             // GAME RUNNING //
-    private static void welcomeMessage(){
+    private void welcomeMessage() {
         System.out.println("\t\t\tTAMAGOTCHI\n" + longLine + longLine);
         System.out.println("Greetings friend. What pet would you \nlike?\n" +
                 longLine + longLine +
@@ -15,26 +17,43 @@ public class Game {
                 "\n2.\tCat" +
                 "\n3.\tQuit");
     }
-
-    private static void dogMenuOptions(){
-        boolean continueLoop = true;
+    // Second menu for the chosen tamagotchi
+    private void tamagotchiMenuOptions(){
         String inputFromUser = "";
+        // do/while to make menu
         do{
+            System.out.println("\t\t_STATS_");
+            tamagotchi.printAllStats();
+                // Checking if tamagotchi stats are too low and killing if too low.
+            if (tamagotchi.isTamagotchiDeadYet())
+            {
+                System.out.println(longLine);
+                System.out.println("  _____\n" +
+                        " /     \\\n" +
+                        "| () () |\n" +
+                        " \\  ^  /\n" +
+                        "  |||||\n" +
+                        "  |||||");
+                System.out.println("YOU KILLED YOUR TAMAGOTCHI.");
+                System.out.println("GAME OVER.");
+                System.out.println(longLine);
+                break;
+            }
+
+            printMenuMessage();
             inputFromUser = scan.nextLine();
             switch(inputFromUser){
                 case "1":
-                    userDog.play();
-                    continueLoop = false;
-                    dogMenu();
+                    tamagotchi.play();
                     break;
                 case "2":
-                    userDog.feed();
+                    tamagotchi.feed();
                     break;
                 case "3":
-                    userDog.sleep();
+                    tamagotchi.sleep();
                     break;
                 case "4":
-                    userDog.makeSound();
+                    tamagotchi.makeSound();
                     break;
                 case "5":
                     return;
@@ -42,27 +61,28 @@ public class Game {
                     System.out.println("That's not an option!");
             }
 
-        }while(continueLoop);
+        }while(true);
     }
 
-    private static void catMenuOptions(){
-
-    }
-
-    private static void mainMenu(){
+    //First menu to check which animal user chooses
+    private void mainMenu(){
         boolean continueLoop = true;
         String userChoice = "";
         welcomeMessage();
         do{
-        userChoice = scan.nextLine();
+            userChoice = scan.nextLine();
             System.out.println(longLine + longLine);
             switch(userChoice){
                 case "1":
-                    dogMenu();
+                    tamagotchi = new Dog("NoName", randomValue(), randomValue(), randomValue(), randomValue());
+                    assignTamagotchiName(tamagotchi);
+                    tamagotchiMenuOptions();
                     continueLoop = false;
                     break;
                 case "2":
-                    catMenu();
+                    tamagotchi = new Cat("",randomValue(),randomValue(),randomValue(),randomValue());
+                    assignTamagotchiName(tamagotchi);
+                    tamagotchiMenuOptions();
                     continueLoop = false;
                     break;
                 case "3":
@@ -73,61 +93,23 @@ public class Game {
                     System.out.println("Invalid Input.");
             }
 
-        }while(continueLoop);
+        } while(continueLoop);
     }
 
 
-    private static void catMenu(){
-        System.out.println("You've chosen a cat as your Tamagotchi. What would you like" +
-                "\nto name your new little friend?");
-        nameOfTamagotchi = scan.nextLine();
-        Cat userCat = new Cat(nameOfTamagotchi, randomValue(), randomValue(), randomValue(), randomValue());
-    }
-
-    private static void dogMenu(){
-        String inputFromUser = "";
-        boolean continueLoop = true;
-        System.out.println("You've chosen a dog as your Tamagotchi. " +
-                "\nWhat would you like" +
-                "\nto name your new little friend?");
-        nameOfTamagotchi = scan.nextLine();
-        Dog userDog = new Dog(nameOfTamagotchi, randomValue(),randomValue(),randomValue(), randomValue());
-        System.out.println(nameOfTamagotchi + " what a great name!" +
+    private void printMenuMessage(){
+        System.out.println(
                 " What would you like" +
-                "\n to do?\n" +
-                longLine + longLine +
-                "\n1.\tPlay" +
-                "\n2.\tFeed" +
-                "\n3.\tSleep" +
-                "\n4.\tBark" +
-                "\n5.\tQuit");
-        do{
-        inputFromUser = scan.nextLine();
-            switch(inputFromUser){
-                case "1":
-                    userDog.play();
-                    continueLoop = false;
-                    dogMenu();
-                    break;
-                case "2":
-                    userDog.feed();
-                    break;
-                case "3":
-                    userDog.sleep();
-                    break;
-                case "4":
-                    userDog.makeSound();
-                    break;
-                case "5":
-                    return;
-                default:
-                    System.out.println("That's not an option!");
-            }
-
-        }while(continueLoop);
+                        "\n to do?\n" +
+                        longLine + longLine +
+                        "\n1.\tPlay" +
+                        "\n2.\tFeed" +
+                        "\n3.\tSleep" +
+                        "\n4.\tMake sound" +
+                        "\n5.\tQuit");
     }
 
-    private static int randomValue(){
+    private int randomValue(){
         int max = 10;
         int min = 3;
         int range = max - min + 1;
@@ -136,12 +118,23 @@ public class Game {
         return randomNumber;
     }
 
+    private void assignTamagotchiName(Tamagotchi tamagotchi)
+    {
+        System.out.println("What do you wanna call your Tamagotchi?");
 
-            // MAIN //
-    public static void main(String[] args) {
+        tamagotchi.name = scan.nextLine();
+        System.out.println(tamagotchi.name + ".. Great name!");
+    }
+
+    public void startGame()
+    {
         mainMenu();
+    }
+}
 
-
-
+public class Game {
+    // MAIN //
+    public static void main(String[] args) {
+        new GameStart().startGame();
     }
 }
